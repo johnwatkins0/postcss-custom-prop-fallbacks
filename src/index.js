@@ -5,14 +5,32 @@ class CustomPropsFallbacks {
     return decl.prop.indexOf('--') === 0;
   }
 
-  static isCustomProp(value) {
-    return value.indexOf('var(' === 0);
+  static usesCustomProp(value) {
+    return value.indexOf('var(--') !== -1;
+  }
+
+  static getVariableFrom(value) {
+    if (!CustomPropsFallbacks.usesCustomProp(value)) {
+      return null;
+    }
+
+    const extractedValue = value.substring(value.indexOf('var(') + 4);
+
+    if (extractedValue.indexOf(')') === -1) {
+      return null;
+    }
+
+    return extractedValue.substring(0, extractedValue.indexOf(')'));
   }
 
   constructor(root) {
     this.root = root;
-    this.customProps = this.collectCustomProps();
+    this.customProps = {};
+
     this.addFallback = this.addFallback.bind(this);
+    this.collectCustomProps = this.collectCustomProps.bind(this);
+
+    this.collectCustomProps();
   }
 
   shouldRun() {
@@ -22,22 +40,21 @@ class CustomPropsFallbacks {
   collectCustomProps() {
     this.root.walkDecls((decl) => {
       if (CustomPropsFallbacks.setsCustomProp(decl)) {
-        this.customProps[`var(${decl.prop})`] = decl.value.trim();
+        this.customProps[decl.prop] = decl.value.trim();
       }
     });
   }
 
   addFallback(decl) {
-    if (!CustomPropsFallbacks.isCustomProp(decl.value.trim())) {
+    const originalValue = decl.value.trim();
+    const value = CustomPropsFallbacks.getVariableFrom(originalValue);
+
+    if (value === null || !(value in this.customProps)) {
       return;
     }
 
-    if (!(decl.value.trim() in this.customProps)) {
-      return;
-    }
-
-    const newProp = this.customProps[decl.value.trim()];
-    const newRule = `\n\t${decl.prop}: ${newProp}`;
+    const newValue = originalValue.replace(`var(${value})`, this.customProps[value]);
+    const newRule = `\n\t${decl.prop}: ${newValue}`;
     decl.before(newRule);
   }
 

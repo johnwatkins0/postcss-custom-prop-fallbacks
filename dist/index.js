@@ -17,9 +17,24 @@ var CustomPropsFallbacks = function () {
       return decl.prop.indexOf('--') === 0;
     }
   }, {
-    key: 'isCustomProp',
-    value: function isCustomProp(value) {
-      return value.indexOf('var(' === 0);
+    key: 'usesCustomProp',
+    value: function usesCustomProp(value) {
+      return value.indexOf('var(--') !== -1;
+    }
+  }, {
+    key: 'getVariableFrom',
+    value: function getVariableFrom(value) {
+      if (!CustomPropsFallbacks.usesCustomProp(value)) {
+        return null;
+      }
+
+      var extractedValue = value.substring(value.indexOf('var(') + 4);
+
+      if (extractedValue.indexOf(')') === -1) {
+        return null;
+      }
+
+      return extractedValue.substring(0, extractedValue.indexOf(')'));
     }
   }]);
 
@@ -27,8 +42,12 @@ var CustomPropsFallbacks = function () {
     _classCallCheck(this, CustomPropsFallbacks);
 
     this.root = root;
-    this.customProps = this.collectCustomProps();
+    this.customProps = {};
+
     this.addFallback = this.addFallback.bind(this);
+    this.collectCustomProps = this.collectCustomProps.bind(this);
+
+    this.collectCustomProps();
   }
 
   _createClass(CustomPropsFallbacks, [{
@@ -43,23 +62,22 @@ var CustomPropsFallbacks = function () {
 
       this.root.walkDecls(function (decl) {
         if (CustomPropsFallbacks.setsCustomProp(decl)) {
-          _this.customProps['var(' + decl.prop + ')'] = decl.value.trim();
+          _this.customProps[decl.prop] = decl.value.trim();
         }
       });
     }
   }, {
     key: 'addFallback',
     value: function addFallback(decl) {
-      if (!CustomPropsFallbacks.isCustomProp(decl.value.trim())) {
+      var originalValue = decl.value.trim();
+      var value = CustomPropsFallbacks.getVariableFrom(originalValue);
+
+      if (value === null || !(value in this.customProps)) {
         return;
       }
 
-      if (!(decl.value.trim() in this.customProps)) {
-        return;
-      }
-
-      var newProp = this.customProps[decl.value.trim()];
-      var newRule = '\n\t' + decl.prop + ': ' + newProp;
+      var newValue = originalValue.replace('var(' + value + ')', this.customProps[value]);
+      var newRule = '\n\t' + decl.prop + ': ' + newValue;
       decl.before(newRule);
     }
   }, {
