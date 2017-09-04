@@ -5,32 +5,14 @@ class CustomPropsFallbacks {
     return decl.prop.indexOf('--') === 0;
   }
 
-  static usesCustomProp(value) {
-    return value.indexOf('var(--') !== -1;
-  }
-
-  static getVariableFrom(value) {
-    if (!CustomPropsFallbacks.usesCustomProp(value)) {
-      return null;
-    }
-
-    const extractedValue = value.substring(value.indexOf('var(') + 4);
-
-    if (extractedValue.indexOf(')') === -1) {
-      return null;
-    }
-
-    return extractedValue.substring(0, extractedValue.indexOf(')'));
+  static isCustomProp(value) {
+    return value.indexOf('var(' === 0);
   }
 
   constructor(root) {
     this.root = root;
-    this.customProps = {};
-
+    this.customProps = this.collectCustomProps();
     this.addFallback = this.addFallback.bind(this);
-    this.collectCustomProps = this.collectCustomProps.bind(this);
-
-    this.collectCustomProps();
   }
 
   shouldRun() {
@@ -40,21 +22,22 @@ class CustomPropsFallbacks {
   collectCustomProps() {
     this.root.walkDecls((decl) => {
       if (CustomPropsFallbacks.setsCustomProp(decl)) {
-        this.customProps[decl.prop] = decl.value.trim();
+        this.customProps[`var(${decl.prop})`] = decl.value.trim();
       }
     });
   }
 
   addFallback(decl) {
-    const originalValue = decl.value.trim();
-    const value = CustomPropsFallbacks.getVariableFrom(originalValue);
-
-    if (value === null || !(value in this.customProps)) {
+    if (!CustomPropsFallbacks.isCustomProp(decl.value.trim())) {
       return;
     }
 
-    const newValue = originalValue.replace(`var(${value})`, this.customProps[value]);
-    const newRule = `\n\t${decl.prop}: ${newValue}`;
+    if (!(decl.value.trim() in this.customProps)) {
+      return;
+    }
+
+    const newProp = this.customProps[decl.value.trim()];
+    const newRule = `\n\t${decl.prop}: ${newProp}`;
     decl.before(newRule);
   }
 
