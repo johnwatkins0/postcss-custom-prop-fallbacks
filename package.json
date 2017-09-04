@@ -1,6 +1,6 @@
 {
   "name": "postcss-custom-prop-fallbacks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Provides fallbacks for custom properties set in :root.",
   "main": "dist/index.js",
   "scripts": {
@@ -10,7 +10,10 @@
     "type": "git",
     "url": "git+https://github.com/johnwatkins0/postcss-custom-prop-fallbacks.git"
   },
-  "keywords": ["postcss", "custom-properties"],
+  "keywords": [
+    "postcss",
+    "custom-properties"
+  ],
   "author": "John Watkins",
   "license": "ISC",
   "bugs": {
@@ -27,7 +30,9 @@
     "gulp-util": "^3.0.8"
   },
   "eslintConfig": {
-    "extends": ["johnwatkins0"]
+    "extends": [
+      "johnwatkins0"
+    ]
   },
   "dependencies": {
     "postcss": "^6.0.10"
