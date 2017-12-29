@@ -4,7 +4,12 @@
   "description": "Provides fallbacks for custom properties set in :root.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "develop": "babel --watch src --out-dir dist",
+    "build": "babel src --out-dir dist",
+    "prepare": "BABEL_ENV=publish babel src --out-dir dist",
+    "lint": "eslint *.js",
+    "pretest": "npm run lint",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -21,18 +26,15 @@
   },
   "homepage": "https://github.com/johnwatkins0/postcss-custom-prop-fallbacks#readme",
   "devDependencies": {
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-node6": "^11.0.0",
-    "eslint-config-johnwatkins0": "^1.0.3",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-notify": "^3.0.0",
-    "gulp-util": "^3.0.8"
-  },
-  "eslintConfig": {
-    "extends": [
-      "johnwatkins0"
-    ]
+    "babel": "^6.5.2",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-eslint": "^8.1.2",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.14.0",
+    "eslint-config-postcss": "^2.0.2",
+    "eslint-plugin-jest": "^21.5.0",
+    "jest": "^22.0.4"
   },
   "dependencies": {
     "postcss": "^6.0.10"

@@ -1,0 +1,21 @@
+:root {
+  --background-color: red;
+  --color: white;
+  --link-color: blue;
+}
+
+main {
+  background-color: red;
+  background-color: var(--background-color);
+}
+
+article {
+  font-size: 112%;
+  color: white;
+  color: var(--color);
+}
+
+p a {
+  color: blue;
+  color: var(--link-color);
+}
