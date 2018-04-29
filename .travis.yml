@@ -3,4 +3,5 @@ cache: yarn
 node_js:
   - stable
 notifications:
-    slack: johnwatkins0:VNM6Rad4WILTZAwHDY4xbybX
+  email: false
+  slack: johnwatkins0:VNM6Rad4WILTZAwHDY4xbybX
