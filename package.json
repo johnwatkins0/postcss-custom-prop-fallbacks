@@ -1,6 +1,6 @@
 {
   "name": "postcss-custom-prop-fallbacks",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Provides fallbacks for custom properties set in :root.",
   "main": "dist/index.js",
   "scripts": {
