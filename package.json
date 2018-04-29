@@ -4,9 +4,9 @@
   "description": "Provides fallbacks for custom properties set in :root.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "babel --watch src --out-dir dist",
+    "start": "babel --watch src --out-dir dist --ignore __tests__",
     "build": "babel src --out-dir dist",
-    "prepare": "BABEL_ENV=publish babel src --out-dir dist",
+    "prepare": "BABEL_ENV=publish babel src --out-dir dist --ignore __tests__",
     "lint": "eslint *.js",
     "pretest": "npm run lint",
     "test": "jest"
