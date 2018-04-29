@@ -2,4 +2,5 @@ language: node_js
 cache: yarn
 node_js:
   - stable
-  - "6"
+notifications:
+    slack: johnwatkins0:VNM6Rad4WILTZAwHDY4xbybX
