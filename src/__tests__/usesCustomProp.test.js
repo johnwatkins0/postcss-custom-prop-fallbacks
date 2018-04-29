@@ -1,6 +1,6 @@
 import postcss from 'postcss';
 
-import { usesCustomProp } from '../src/usesCustomProp';
+import { usesCustomProp } from '../usesCustomProp';
 
 test('A decl that uses a custom prop is correctly identified.', () => {
     expect(

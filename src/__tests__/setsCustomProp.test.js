@@ -1,4 +1,4 @@
-import { setsCustomProp } from '../src/setsCustomProp';
+import { setsCustomProp } from '../setsCustomProp';
 import postcss from 'postcss';
 
 test('A decl setting a custom prop is correctly idenfied.', () => {

@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import postcss from 'postcss';
 
-import { addCustomPropFallbacks } from '../src/addCustomPropFallbacks';
+import { addCustomPropFallbacks } from '../addCustomPropFallbacks';
 
 const getPreprocessedFile = () =>
     new Promise(resolve => {

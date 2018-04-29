@@ -1,6 +1,6 @@
 import postcss from 'postcss';
 
-import { collectCustomProps } from '../src/collectCustomProps';
+import { collectCustomProps } from '../collectCustomProps';
 
 test('Custom props are colllected.', done => {
     postcss

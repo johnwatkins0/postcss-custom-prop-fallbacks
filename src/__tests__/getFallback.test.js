@@ -1,6 +1,6 @@
 import postcss from 'postcss';
 
-import { getFallback } from '../src/getFallback';
+import { getFallback } from '../getFallback';
 
 test('A correct fallback declaration is created.', () => {
     const decl = postcss.parse('background-color: var(--background-color);')
